@@ -2,6 +2,8 @@
 import Link from 'next/link'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import EditGroup from '../my-components/editGroup';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const groupsList = ['Office', 'Develop', 'Server', 'Settings'];
 
@@ -26,16 +28,22 @@ export default function SettingsScreen (){
 
                 
                     <div className="h-12 pl-2 ml-28 mr-28 mb-2 rounded-sm bg-slate-800 opacity-70 flex flex-row items-center">
-                        Background URL:
+
+                        Background-URL:
+                        <Input id="bg-url" value="http://www.pic.com"></Input>
+                     
                     </div>
                     <div className="h-12 pl-2 ml-28 mr-28 mb-2 rounded-sm bg-slate-800 opacity-70 flex flex-row items-center">
                         Primary Color:
+                        <Input id="primary-color" value="slate-700" className="ml-12"></Input>
                     </div>
                     <div className="h-12 pl-2 ml-28 mr-28 mb-2 rounded-sm bg-slate-800 opacity-70 flex flex-row items-center">
                         Secondary Color:
+                        <Input id="Secondary Color:" value="cyan-600"></Input>
                     </div>
                     <div className="h-12 pl-2 ml-28 mr-28 mb-2 rounded-sm bg-slate-800 opacity-70 flex flex-row items-center">
                         Accent Color:
+                        <Input id="primary-color" value="slate-700" className="ml-12"></Input>
                     </div>
                    
             </div>

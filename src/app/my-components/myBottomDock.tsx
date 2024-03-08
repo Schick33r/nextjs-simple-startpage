@@ -1,19 +1,104 @@
 'use client'
 import SettingsIcon from '@mui/icons-material/Settings';
-import React, { useState } from 'react';
 import MyDock1Items from './MyDock1Items';
-import { Key } from '@mui/icons-material';
-import Link from 'next/link'
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import "firebase/firestore";
+import { db } from "../firebase"
+import {
+    getDoc,
+    getDocs,
+    collection,
+    addDoc,
+    updateDoc,
+    doc,
+    deleteDoc,
+    } from "firebase/firestore";
+
+
+    interface Item {
+        url: string;
+        pic: string;
+        description: string;
+        pos: string;
+    }
+    
+    interface Items {
+        [key: string]: Item;
+    }
+    
+    interface Group {
+        pos: string;
+        name: string;
+        description: string;
+        items: Items;
+    }
+  
+    
+    async function fetchDataFromDocs(): Promise<Item[]>{
+        const itemsList: Item[] = []
+        let x = 1;
+  
+      const querySnapshot = await getDocs(collection(db, "dockItems"));
+      querySnapshot.forEach((doc => {
+        console.log(x)
+        x++
+        console.log(doc.id, " => ", doc.data());
+        
+        
+        
+        const docCount = querySnapshot.size;
+        console.log("Number of documents:", docCount);
+
+
+        const data = doc.data()
+        const dataItems = data.items
+        
+
+        // Iterate over the object and push the items into the itemsList
+        
+            for (const key in dataItems) {
+                if (dataItems.hasOwnProperty(key)) {
+                    console.log(`Key: ${key}`);
+                    const item = dataItems[key];
+                    const groupItem: Item = {
+                        description: item.description,
+                        url: item.url,
+                        pic: item.pic,
+                        pos: item.pos
+                    };
+                    itemsList.push(groupItem);
+                }
+            }
+            console.log(itemsList)
+        }));
+        return itemsList;
+      }
 
 export default function MyBottomDock () {
+    const [dockItemsData, setDockItemsData] = useState([] as any);
+
+    useEffect(() => {
+        async function fetchData() {
+          const data : any [] = await fetchDataFromDocs();
+          setDockItemsData(data);
+        }
+        fetchData();
+      }, []);
+
+    //   useEffect(() => {
+    //     fetchDataFromDocs();
+    // }, []); 
+      
+
+
+
     const router = useRouter();
-    const dockItems = ['1', '2', '3', 'S'];
+    const dockItems = ['1', '2', '3', <SettingsIcon></SettingsIcon>];
 
     const [showMyDock1Items, setMyDock1Items] = useState(false);
 
-    const handleClick = (index: number) => {
-        
+    const handleClick = (index: number) => {   
         console.log(index)
         if(index == 0){
             console.log('0 clicked')
